@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: webapp
+          image: webapp:latest
+          imagePullPolicy: Never
+          env:
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: webapp-secret
+                  key: rails_master_key
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: password
+            - name: DATABASE_URL
+              value: postgres://postgres:$(DB_PASSWORD)@db-service:5432/app_db
+          ports:
+            - containerPort: 3000
+  selector:
+    matchLabels:
+      app: webapp
