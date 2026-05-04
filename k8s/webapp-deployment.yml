@@ -13,8 +13,8 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: webapp:latest
-          imagePullPolicy: Never
+          image: ghrc.io/tkdn00/webapp:latest
+          imagePullPolicy: Always
           env:
             - name: RAILS_MASTER_KEY
               valueFrom:
